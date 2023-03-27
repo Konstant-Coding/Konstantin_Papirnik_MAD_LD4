@@ -33,4 +33,6 @@ fun Navigation() {
                 DETAIL_ARGUMENT_KEY))   // get the argument from navhost that will be passed
         }
     }
+    // add viewModel to composable
+    // val movieViewModel: MoviesViewModel =viewModel()
 }
