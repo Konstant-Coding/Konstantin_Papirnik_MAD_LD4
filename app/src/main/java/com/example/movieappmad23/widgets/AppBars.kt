@@ -14,16 +14,16 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun SimpleTopAppBar(arrowBackClicked: () -> Unit = {}, content: @Composable () -> Unit){
-    TopAppBar(elevation = 3.dp) {
+    TopAppBar(elevation = 4.dp) {
         Row {
             Icon(imageVector = Icons.Default.ArrowBack,
-                contentDescription = "Arrow back",
+                contentDescription = "back",
                 modifier = Modifier.clickable {
                     arrowBackClicked()
                 }
             )
 
-            Spacer(modifier = Modifier.width(20.dp))
+            Spacer(modifier = Modifier.width(22.dp))
 
             content()
         }

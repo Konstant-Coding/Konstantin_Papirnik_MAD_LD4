@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
@@ -37,30 +38,32 @@ import com.example.movieappmad23.ui.theme.Shapes
 @Preview
 @Composable
 fun MovieRow(
-    movie: Movie = getMovies()[0],
     modifier: Modifier = Modifier,
-    onItemClick: (String) -> Unit = {}
+    movie: Movie = getMovies()[0],
+    onItemClick: (String) -> Unit = {},
+    onFavClick: (Movie) -> Unit = {}
+
 ) {
     Card(modifier = modifier
         .clickable {
             onItemClick(movie.id)
         }
         .fillMaxWidth()
-        .padding(5.dp),
+        .padding(6.dp),
         shape = Shapes.large,
-        elevation = 10.dp
+        elevation = 12.dp
     ) {
         Column {
             Box(modifier = Modifier
-                .height(150.dp)
+                .height(160.dp)
                 .fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ) {
                 MovieImage(imageUrl = movie.images[0])
-                FavoriteIcon()
+                FavoriteIcon(onFavClick, movie)
             }
 
-            MovieDetails(modifier = Modifier.padding(12.dp), movie = movie)
+            MovieDetails(modifier = Modifier.padding(13.dp), movie = movie)
         }
     }
 }
@@ -83,7 +86,7 @@ fun MovieImage(imageUrl: String) {
 }
 
 @Composable
-fun FavoriteIcon() {
+fun FavoriteIcon(onFavClick: (Movie) -> Unit, movie: Movie) {
     Box(modifier = Modifier
         .fillMaxSize()
         .padding(10.dp),
@@ -91,8 +94,17 @@ fun FavoriteIcon() {
     ){
         Icon(
             tint = MaterialTheme.colors.secondary,
-            imageVector = Icons.Default.FavoriteBorder,
-            contentDescription = "Add to favorites")
+            imageVector = if (movie.isFavorite) {
+                Icons.Filled.Favorite
+            } else {
+                Icons.Default.FavoriteBorder
+            },
+            contentDescription = "Add to list of favorites",
+            modifier = Modifier
+                .clickable {
+                    onFavClick(movie)
+                },
+        )
     }
 }
 

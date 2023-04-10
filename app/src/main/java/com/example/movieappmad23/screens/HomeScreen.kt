@@ -19,46 +19,49 @@ import com.example.movieappmad23.models.Movie
 import com.example.movieappmad23.models.getMovies
 import com.example.movieappmad23.widgets.HomeTopAppBar
 import com.example.movieappmad23.widgets.MovieRow
+import com.example.movieappmad23.ViewModel.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
-fun HomeScreen(navController: NavController = rememberNavController()){
+fun HomeScreen(navController: NavController = rememberNavController(), viewModel: ViewModel = viewModel()){
     Scaffold(topBar = {
         HomeTopAppBar(
             title = "Home",
             menuContent = {
                 DropdownMenuItem(onClick = { navController.navigate(Screen.AddMovieScreen.route) }) {
                     Row {
-                        Icon(imageVector = Icons.Default.Edit, contentDescription = "Add Movie", modifier = Modifier.padding(4.dp))
+                        Icon(imageVector = Icons.Default.Edit, contentDescription = "Add Movie", modifier = Modifier.padding(5.dp))
                         Text(text = "Add Movie", modifier = Modifier
                             .width(100.dp)
-                            .padding(4.dp))
+                            .padding(5.dp))
                     }
                 }
                 DropdownMenuItem(onClick = { navController.navigate(Screen.FavoriteScreen.route) }) {
                     Row {
-                        Icon(imageVector = Icons.Default.Favorite, contentDescription = "Favorites", modifier = Modifier.padding(4.dp))
+                        Icon(imageVector = Icons.Default.Favorite, contentDescription = "Favorites", modifier = Modifier.padding(5.dp))
                         Text(text = "Favorites", modifier = Modifier
                             .width(100.dp)
-                            .padding(4.dp))
+                            .padding(5.dp))
                     }
                 }
             }
         )
     }) { padding ->
-        MainContent(modifier = Modifier.padding(padding), navController = navController)
+        MainContentA(modifier = Modifier.padding(padding), navController = navController, viewModel = viewModel)
     }
+
 }
 
 @Composable
-fun MainContent(
+fun MainContentA(
     modifier: Modifier,
-    navController: NavController
+    navController: NavController,
+    viewModel: ViewModel = ViewModel()
 ) {
-    val movies = getMovies()
     MovieList(
         modifier = modifier,
         navController = navController,
-        movies = movies
+        viewModel = viewModel,
     )
 }
 
@@ -66,22 +69,23 @@ fun MainContent(
 fun MovieList(
     modifier: Modifier = Modifier,
     navController: NavController,
-    movies: List<Movie> = getMovies()
+    viewModel: ViewModel,
 ) {
     LazyColumn (
         modifier = modifier,
         contentPadding = PaddingValues(all = 12.dp),
-        verticalArrangement = Arrangement.spacedBy(4.dp)
+        verticalArrangement = Arrangement.spacedBy(5.dp)
     ) {
-        items(movies) { movie ->
+        items(viewModel.allMovies) { movie ->
             MovieRow(
                 movie = movie,
                 onItemClick = { movieId ->
                     navController.navigate(Screen.DetailScreen.withId(movieId))
+                },
+                onFavClick = { movieId ->
+                    viewModel.toggleFavorite(movieId)
                 }
             )
         }
     }
 }
-
-

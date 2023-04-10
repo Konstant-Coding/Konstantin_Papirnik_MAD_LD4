@@ -12,17 +12,19 @@ import com.example.movieappmad23.models.getMovies
 import com.example.movieappmad23.widgets.HorizontalScrollableImageView
 import com.example.movieappmad23.widgets.MovieRow
 import com.example.movieappmad23.widgets.SimpleTopAppBar
+import com.example.movieappmad23.ViewModel.ViewModel
 
-fun filterMovie(movieId: String): Movie {
-    return getMovies().filter { it.id == movieId}[0]
-}
+
+//fun filterMovie(movieId: String): Movie {
+//    return getMovies().filter { it.id == movieId}[0]
+// }
+
+
 @Composable
-fun DetailScreen(
-    navController: NavController,
-    movieId:String?){
+fun DetailScreen(navController: NavController, movieId:String?, viewModel: ViewModel){
 
     movieId?.let {
-        val movie = filterMovie(movieId = movieId)
+        val movie = viewModel.allMovies.filter { it.id == movieId }[0]
 
         // needed for show/hide snackbar
         val scaffoldState = rememberScaffoldState() // this contains the `SnackbarHostState`
@@ -34,33 +36,29 @@ fun DetailScreen(
                 }
             },
         ) { padding ->
-            MainContent(Modifier.padding(padding), movie)
+            MainContent(Modifier.padding(padding), movie, viewModel = viewModel)
         }
     }
 }
 
 @Composable
-fun MainContent(modifier: Modifier = Modifier, movie: Movie) {
+fun MainContent(modifier: Modifier = Modifier, movie: Movie, viewModel: ViewModel) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
     ) {
-
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
-
-            MovieRow(movie = movie)
-
+            MovieRow(movie = movie, onFavClick = { movieId -> viewModel.toggleFavorite(movieId) })
             Spacer(modifier = Modifier.height(8.dp))
-
             Divider()
-
             Text(text = "Movie Images", style = MaterialTheme.typography.h5)
-
             HorizontalScrollableImageView(movie = movie)
         }
     }
 }
+
+

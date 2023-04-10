@@ -8,7 +8,11 @@ sealed class Screen (val route: String) {
             return this.route.replace(oldValue = "{$DETAIL_ARGUMENT_KEY}", newValue = id)
         }
     }
-    object FavoriteScreen : Screen("favorite")
 
     object AddMovieScreen : Screen("addMovie")
+
+    // object AddMovieButton : Screen("Add") Tried to add new functionality
+
+    object FavoriteScreen : Screen("favorite")
+
 }
